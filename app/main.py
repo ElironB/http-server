@@ -19,7 +19,7 @@ def main():
                 filename = path.split("/")[-1]
                 print(filename)
                 direc = sys.argv[2]
-                print(direc)
+                print(direc,filename)
                 with open(f"/{direc}{filename}", "r") as f:
                     body = f.read()
                 length = str(len(body)).encode("utf-8")   
@@ -29,10 +29,10 @@ def main():
                 b"Content-Length" + length + b"\r\n"
                 b"\r\n"  + body
                 )
-                print(response)
                 connection.send(response)
-            except:
+            except FileNotFoundError:
                 connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
+            connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n" + direc + filename)    
         elif path.startswith("/echo"):
             st = path.split("/")[-1].encode("utf-8")
             length = str(len(st)).encode("utf-8")
