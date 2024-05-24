@@ -17,6 +17,7 @@ def main():
         if path.startswith("/files"):
             try:
                 filename = path.split("/")[-1].encode("utf-8") 
+                print(filename)
                 direc = sys.argv[2]
                 with open(f"/{direc}/{filename}", "r") as f:
                     body = f.read()
