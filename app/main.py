@@ -1,6 +1,7 @@
 # Uncomment this to pass the first stage
 import socket as s
-
+import sys
+import os
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -13,7 +14,23 @@ def main():
         print(f"Connected by {address}")
         data = connection.recv(4096).decode("utf-8")
         path = data.split(" ")[1]
-        if path.startswith("/echo"):
+        if path.startswith("/files"):
+            try:
+                filename = path.split("/")[-1].encode("utf-8") 
+                direc = sys.argv[2]
+                with open(f"/{direc}/{filename}", "r") as f:
+                    body = f.read()
+                length = str(len(body)).encode("utf-8")   
+                response = (
+                b"HTTP/1.1 200 OK\r\n"
+                b"Content-Type: application/octet-stream\r\n"
+                b"Content-Length" + length + b"\r\n"
+                b"\r\n"  + body
+                )
+                connection.send(response)
+            except:
+                connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
+        elif path.startswith("/echo"):
             st = path.split("/")[-1].encode("utf-8")
             length = str(len(st)).encode("utf-8")
             response = (
