@@ -57,13 +57,21 @@ def main():
                     break
             st = path.split("/")[-1].encode("utf-8")
             length = str(len(st)).encode("utf-8")
-            response = (
-                b"HTTP/1.1 200 OK\r\n"
-                b"Content-Encoding: "+ encod_type + b"\r\n"
-                b"Content-Type: text/plain\r\n"
-                b"Content-Length: " + length + b"\r\n"
-                b"\r\n" + st
-            )
+            if encod_type == "gzip":
+                response = (
+                    b"HTTP/1.1 200 OK\r\n"
+                    b"Content-Encoding: "+ encod_type + b"\r\n"
+                    b"Content-Type: text/plain\r\n"
+                    b"Content-Length: " + length + b"\r\n"
+                    b"\r\n" + st
+                )
+            else:
+                response = (
+                    b"HTTP/1.1 200 OK\r\n"
+                    b"Content-Type: text/plain\r\n"
+                    b"Content-Length: " + length + b"\r\n"
+                    b"\r\n" + st
+                ) 
             connection.send(response)
         elif path == "/user-agent":
             headers = data.split("\r\n")
