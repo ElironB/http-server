@@ -13,11 +13,19 @@ def main():
         connection , address = server_socket.accept()
         print(f"Connected by {address}")
         data = connection.recv(4096).decode("utf-8")
+        method = data.split(" ")[0]
         path = data.split(" ")[1]
-        if path.startswith("/files"):
+        if method == "POST" and path.startswith("/files"):
+            direc =sys.argv[2].rstrip('/')
+            filename = path[7:]
+            full_path = f"{direc}/{filename}"
+            with open(full_path ,"x") as f:
+                f.write(path = data.split(" ")[-1])
+                connection.send(b"HTTP/1.1 201 OK\r\n\r\n")
+        elif path.startswith("/files"):
             try:
-                filename = path[7:]  # Extracting filename from the path
-                direc = sys.argv[2].rstrip('/')  # Removing trailing slash if any
+                filename = path[7:] 
+                direc = sys.argv[2].rstrip('/') 
                 full_path = f"{direc}/{filename}"
                 print(f"Trying to open: {full_path}")
                 with open(full_path, "r") as f:
