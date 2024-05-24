@@ -20,7 +20,7 @@ def main():
                 print(filename)
                 direc = sys.argv[2]
                 print(direc)
-                with open(f"/{direc}/{filename}", "r") as f:
+                with open(f"/{direc}{filename}", "r") as f:
                     body = f.read()
                 length = str(len(body)).encode("utf-8")   
                 response = (
