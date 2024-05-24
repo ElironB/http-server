@@ -13,15 +13,23 @@ def main():
         connection , address = server_socket.accept()
         print(f"Connected by {address}")
         data = connection.recv(4096).decode("utf-8")
-        method = data.split(" ")[0]
-        path = data.split(" ")[1]
+        request_line = data.split("\r\n")[0]
+        headers_and_body = data.split("\r\n\r\n", 1)
+        headers = headers_and_body[0]
+        body = headers_and_body[1] if len(headers_and_body) > 1 else ""
+        method, path, _ = request_line.split(" ")
         if method == "POST" and path.startswith("/files"):
             direc =sys.argv[2].rstrip('/')
             filename = path[7:]
             full_path = f"{direc}/{filename}"
-            with open(full_path ,"x") as f:
-                f.write(path = data.split(" ")[-1])
-                connection.send(b"HTTP/1.1 201 OK\r\n\r\n")
+            try:
+                with open(full_path, "x") as f:
+                    f.write(body)
+                connection.send(b"HTTP/1.1 201 Created\r\n\r\n")
+            except FileExistsError:
+                connection.send(b"HTTP/1.1 409 Conflict\r\n\r\n")
+            except:  
+                connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
         elif path.startswith("/files"):
             try:
                 filename = path[7:] 
