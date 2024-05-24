@@ -16,7 +16,7 @@ def main():
         path = data.split(" ")[1]
         if path.startswith("/files"):
             try:
-                filename = path.split("/")[-1].encode("utf-8") 
+                filename = path.split("/")[-1]
                 print(filename)
                 direc = sys.argv[2]
                 print(direc)
