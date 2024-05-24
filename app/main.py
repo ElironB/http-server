@@ -27,12 +27,11 @@ def main():
                 b"HTTP/1.1 200 OK\r\n"
                 b"Content-Type: application/octet-stream\r\n"
                 b"Content-Length" + length + b"\r\n"
-                b"\r\n"  + body
+                b"\r\n"  + body.encode("utf-8")
                 )
                 connection.send(response)
             except FileNotFoundError:
-                connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
-            connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n" + direc + filename)    
+                connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n")  
         elif path.startswith("/echo"):
             st = path.split("/")[-1].encode("utf-8")
             length = str(len(st)).encode("utf-8")
