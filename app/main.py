@@ -19,6 +19,7 @@ def main():
                 filename = path.split("/")[-1].encode("utf-8") 
                 print(filename)
                 direc = sys.argv[2]
+                print(direc)
                 with open(f"/{direc}/{filename}", "r") as f:
                     body = f.read()
                 length = str(len(body)).encode("utf-8")   
