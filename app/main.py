@@ -16,22 +16,22 @@ def main():
         path = data.split(" ")[1]
         if path.startswith("/files"):
             try:
-                filename = path[7:]
-                print(filename)
-                direc = sys.argv[2]
-                print(direc,filename)
-                with open(f"/{direc}{filename}", "r") as f:
+                filename = path[7:]  # Extracting filename from the path
+                direc = sys.argv[2].rstrip('/')  # Removing trailing slash if any
+                full_path = f"{direc}/{filename}"
+                print(f"Trying to open: {full_path}")
+                with open(full_path, "r") as f:
                     body = f.read()
-                length = str(len(body)).encode("utf-8")   
+                length = str(len(body)).encode("utf-8")
                 response = (
-                b"HTTP/1.1 200 OK\r\n"
-                b"Content-Type: application/octet-stream\r\n"
-                b"Content-Length" + length + b"\r\n"
-                b"\r\n"  + body.encode("utf-8")
+                    b"HTTP/1.1 200 OK\r\n"
+                    b"Content-Type: application/octet-stream\r\n"
+                    b"Content-Length: " + length + b"\r\n"
+                    b"\r\n" + body.encode("utf-8")
                 )
                 connection.send(response)
-            except FileNotFoundError:
-                connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n")  
+            except:
+                connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
         elif path.startswith("/echo"):
             st = path.split("/")[-1].encode("utf-8")
             length = str(len(st)).encode("utf-8")
