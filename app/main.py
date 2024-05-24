@@ -1,5 +1,6 @@
 # Uncomment this to pass the first stage
 import socket as s
+import http.server
 
 
 def main():
@@ -9,8 +10,14 @@ def main():
     # Uncomment this to pass the first stage
     #
     server_socket = s.create_server(("localhost", 4221))
-    server_socket.accept()[0].sendall(b"HTTP/1.1 200 OK \r\n\r\n") # wait for client
-    
+    server_socket.listen()
+
+    while True:
+        connection , address = server_socket.accept()
+        
+        connection.sendall(b"HTTP/1.1 200 OK\r\n\r\n") 
+
+        connection.close()
 
 
 if __name__ == "__main__":
