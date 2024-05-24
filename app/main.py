@@ -23,6 +23,21 @@ def main():
             b"\r\n" + st
         )
         connection.send(response)
+    elif path == "/user-agent":
+        headers = data.split("\r\n")
+        agent = ""
+        for header in headers:
+            if header.startswith("User-Agent:"):
+                agent = header.split(": ", 1)[1].encode("utf-8")
+                break
+        length = str(len(agent)).encode("utf-8")
+        response = (
+            b"HTTP/1.1 200 OK\r\n"
+            b"Content-Type: text/plain\r\n"
+            b"Content-Length: " + length + b"\r\n"
+            b"\r\n" + agent
+        )     
+        connection.send(response)
     elif path == "/":
         connection.send(b"HTTP/1.1 200 OK\r\n\r\n")
     else:
