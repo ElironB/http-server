@@ -29,6 +29,7 @@ def main():
                 b"Content-Length" + length + b"\r\n"
                 b"\r\n"  + body
                 )
+                print(response)
                 connection.send(response)
             except:
                 connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
