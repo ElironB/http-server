@@ -1,7 +1,7 @@
 # Uncomment this to pass the first stage
 import socket as s
 import sys
-import os
+import gzip
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -58,12 +58,14 @@ def main():
                     encod_type = header.split(": ", 1)[1]
                     break
             if "gzip" in encod_type.split(", "):
+                comp = gzip.compress(st.encode(""))
+                length = str(len(comp)).encode("utf-8")
                 response = (
                     b"HTTP/1.1 200 OK\r\n"
                     b"Content-Encoding: gzip\r\n"
                     b"Content-Type: text/plain\r\n"
                     b"Content-Length: " + length + b"\r\n"
-                    b"\r\n" + st
+                    b"\r\n" + comp
                 )
             else:
                 response = (
