@@ -58,7 +58,7 @@ def main():
                     encod_type = header.split(": ", 1)[1]
                     break
             if "gzip" in encod_type.split(", "):
-                comp = gzip.compress(st.encode("utf-8"))
+                comp = gzip.compress(st)
                 length = str(len(comp)).encode("utf-8")
                 response = (
                     b"HTTP/1.1 200 OK\r\n"
