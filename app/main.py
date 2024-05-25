@@ -54,6 +54,11 @@ def main():
             for header in headerss:
                 if header.startswith("Accept-Encoding:"):
                     encod_type = header.split(": ", 1)[1]
+                    if len(encod_type) > 1 and "gzip" in encod_type:
+                        encod_type.split(", ")
+                        for typ in encod_type:
+                            if typ == "gzip":
+                                encod_type = "X"
                     break
             st = path.split("/")[-1].encode("utf-8")
             length = str(len(st)).encode("utf-8")
