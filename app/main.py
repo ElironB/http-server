@@ -50,6 +50,8 @@ def main():
                 connection.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
         elif path.startswith("/echo"):
             headerss = data.split("\r\n")
+            st = path.split("/")[-1].encode("utf-8")
+            length = str(len(st)).encode("utf-8")
             encod_type = ""
             for header in headerss:
                 if header.startswith("Accept-Encoding:"):
@@ -63,8 +65,6 @@ def main():
                             b"\r\n" + st
                         )
                         break
-            st = path.split("/")[-1].encode("utf-8")
-            length = str(len(st)).encode("utf-8")
             if encod_type == "gzip":
                 response = (
                     b"HTTP/1.1 200 OK\r\n"
