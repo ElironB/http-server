@@ -55,17 +55,20 @@ def main():
                 if header.startswith("Accept-Encoding:"):
                     encod_type = header.split(": ", 1)[1]
                     if len(encod_type) > 1 and "gzip" in encod_type:
-                        encod_type.split(", ")
-                        for typ in encod_type:
-                            if typ == "gzip":
-                                encod_type = "X"
-                    break
+                        response = (
+                            b"HTTP/1.1 200 OK\r\n"
+                            b"Content-Encoding: gzip\r\n"
+                            b"Content-Type: text/plain\r\n"
+                            b"Content-Length: " + length + b"\r\n"
+                            b"\r\n" + st
+                        )
+                        break
             st = path.split("/")[-1].encode("utf-8")
             length = str(len(st)).encode("utf-8")
             if encod_type == "gzip":
                 response = (
                     b"HTTP/1.1 200 OK\r\n"
-                    b"Content-Encoding: "+ encod_type.encode("utf-8") + b"\r\n"
+                    b"Content-Encoding: gzip\r\n"
                     b"Content-Type: text/plain\r\n"
                     b"Content-Length: " + length + b"\r\n"
                     b"\r\n" + st
