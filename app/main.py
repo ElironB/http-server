@@ -56,16 +56,8 @@ def main():
             for header in headerss:
                 if header.startswith("Accept-Encoding:"):
                     encod_type = header.split(": ", 1)[1]
-                    if len(encod_type) > 1 and "gzip" in encod_type.split(", "):
-                        response = (
-                            b"HTTP/1.1 200 OK\r\n"
-                            b"Content-Encoding: gzip\r\n"
-                            b"Content-Type: text/plain\r\n"
-                            b"Content-Length: " + length + b"\r\n"
-                            b"\r\n" + st
-                        )
-                        break
-            if encod_type == "gzip":
+                    break
+            if "gzip" in encod_type.split(", "):
                 response = (
                     b"HTTP/1.1 200 OK\r\n"
                     b"Content-Encoding: gzip\r\n"
